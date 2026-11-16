@@ -1,0 +1,127 @@
+<section id="dashboard" class="content-section active">
+  <div class="summary-cards">
+    <div class="card">
+      <h3>Total Balance</h3>
+      <p class="amount" id="total-balance">$0.00</p>
+      <p class="change positive">
+        <i class="fas fa-arrow-up"></i> 0% from last month
+      </p>
+    </div>
+    <div class="card">
+      <h3>Monthly Income</h3>
+      <p class="amount income" id="monthly-income">$0.00</p>
+      <p class="change"><i class="fas fa-calendar-alt"></i> This month</p>
+    </div>
+    <div class="card">
+      <h3>Monthly Expenses</h3>
+      <p class="amount expense" id="monthly-expenses">$0.00</p>
+      <p class="change"><i class="fas fa-calendar-alt"></i> This month</p>
+    </div>
+    <div class="card">
+      <h3>Savings Rate</h3>
+      <p class="amount" id="savings-rate">0%</p>
+      <p class="change"><i class="fas fa-percentage"></i> Of income</p>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-card">
+      <h3>Expenses by Cutoff</h3>
+      <div style="display: flex; gap: 15px; align-items: end">
+        <div class="form-group">
+          <label for="seleccutoff">Cutoff</label>
+          <select id="seleccutoff" name="seleccutoff"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="selecmonth">Month</label>
+          <select id="selecmonth" name="selecmonth"></select>
+        </div>
+        <div class="form-group">
+          <label for="selecyear">Year</label>
+          <select id="selecyear" name="selecyear"></select>
+        </div>
+      </div>
+      <div id="expenseByCutoffTable" class="custom-table-maxwidth">
+        <table id="expensebycutoff-table" class="custom-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Name</th>
+              <th>Due Date</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot></tfoot>
+        </table>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Expenses by Month</h3>
+      <div style="display: flex; gap: 15px; align-items: end">
+        <div class="form-group">
+          <label for="selemmonth">Month</label>
+          <select id="selemmonth" name="selemmonth"></select>
+        </div>
+        <div class="form-group">
+          <label for="selemyear">Year</label>
+          <select id="selemyear" name="selemyear"></select>
+        </div>
+      </div>
+      <div id="expenseByMonthTable" class="custom-table-maxwidth">
+        <table id="expensebymonth-table" class="custom-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Name</th>
+              <th>Due Date</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="chart-container">
+    <div class="chart-card">
+      <h3>Spending by Category</h3>
+      <canvas id="categoryChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Monthly Overview</h3>
+      <canvas id="monthlyChart"></canvas>
+    </div>
+  </div> -->
+
+  <div class="recent-transactions">
+    <h3>Recent Transactions</h3>
+    <div id="transactionsTable" class="custom-table-maxwidth">
+      <table id="transactions-table" class="custom-table">
+        <thead>
+          <tr>
+            <th>Transactions</th>
+            <th>Expense Name</th>
+            <th>Term</th>
+            <th>Amount</th>
+            <th>Paid Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  .form-group {
+    flex: 1;
+  }
+
+  .form-group select {
+    width: 100%;
+  }
+</style>

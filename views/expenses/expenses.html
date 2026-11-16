@@ -1,0 +1,295 @@
+<section id="expenses" class="content-section">
+  <div class="section-header">
+    <h2>Expenses</h2>
+    <button id="add-expenses" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Add Expenses
+    </button>
+  </div>
+
+  <div class="expenses-table">
+    <div id="calendar"></div>
+  </div>
+
+  <div class="modal" id="add-expenses-modal">
+    <div class="modal-content">
+      <span id="close-modal" class="close-modal">&times;</span>
+      <h2>Add Expenses</h2>
+      <form id="add-expenses-form" autocomplete="off">
+        <div class="form-group">
+          <label for="selcategory"
+            >Category <span class="required">*</span></label
+          >
+          <select id="selcategory" name="selcategory"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="txtexpensename"
+            >Expense Name <span class="required">*</span></label
+          >
+          <input type="text" id="txtexpensename" name="txtexpensename" />
+        </div>
+
+        <div class="form-group">
+          <label for="selpayinterval"
+            >Pay Interval <span class="required">*</span></label
+          >
+          <select id="selpayinterval" name="selpayinterval"></select>
+        </div>
+
+        <div id="divstartdate" class="form-group" style="display: none">
+          <label for="txtstartdate"
+            >Start Date <span class="required">*</span></label
+          >
+          <input type="date" id="txtstartdate" name="txtstartdate" />
+        </div>
+
+        <div id="divenddate" class="form-group" style="display: none">
+          <label for="txtenddate"
+            >End Date <span class="required">*</span></label
+          >
+          <input type="date" id="txtenddate" name="txtenddate" />
+        </div>
+
+        <div id="divcustomday" class="form-group" style="display: none">
+          <label for="txtcustomday"
+            >Custom Day <span class="required">*</span></label
+          >
+          <input type="text" id="txtcustomday" name="txtcustomday" />
+        </div>
+
+        <div class="form-group">
+          <label for="txtamount">Amount <span class="required">*</span></label>
+          <input type="text" id="txtamount" name="txtamount" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Expenses</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="expenses-detail-modal">
+    <div class="modal-content">
+      <span id="close-modal" class="close-modal">&times;</span>
+      <h2>Expenses Detail</h2>
+
+      <div>
+        <div id="dtl-category" class="text-muted small text-uppercase mb-1">
+          CATEGORY
+        </div>
+
+        <h3 class="mb-0 fw-semibold d-flex align-items-center flex-wrap gap-2">
+          <span id="dtl-expensename">EXPENSESNAME</span>
+
+          <small id="dtl-expensecode" style="font-weight: lighter">
+            (EXPENSESCODE)
+          </small>
+          <span id="dtl-status"></span>
+        </h3>
+      </div>
+
+      <div class="expense-amounts">
+        <div class="amount-item">
+          <div class="amount-label">Total Amount</div>
+          <div id="dtl-totalamount" class="amount-value"></div>
+        </div>
+
+        <div class="amount-item">
+          <div class="amount-label">Total Paid</div>
+          <div id="dtl-totalpaid" class="amount-value paid"></div>
+        </div>
+
+        <div class="amount-item">
+          <div class="amount-label">Balance</div>
+          <div id="dtl-balance" class="amount-value balance"></div>
+        </div>
+      </div>
+
+      <hr />
+
+      <div id="detail-timeline" class="timeline"></div>
+    </div>
+  </div>
+</section>
+<style>
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    max-width: 600px;
+    max-height: 400px; /* Maximum height */
+    margin: 20px auto;
+    padding-left: 30px;
+    border-left: 3px solid var(--accent-color);
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 25px;
+  }
+
+  .timeline-item-selected {
+    padding-bottom: 5px;
+    border-bottom: 2px solid black;
+    background-color: #f8f9fa;
+  }
+
+  .marker {
+    position: absolute;
+    left: -37px;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--light-gray);
+    border: 3px solid #e68bbe;
+  }
+
+  .timeline-item.paid .marker {
+    background: #28a745;
+    border-color: #28a745;
+  }
+
+  .timeline-item.late .marker {
+    background: #a72828;
+    border-color: #a72828;
+  }
+
+  .content h3 {
+    margin: 0 0 5px;
+    font-size: 16px;
+  }
+
+  .content time {
+    font-size: 12px;
+    color: #666;
+  }
+
+  /* STATUS */
+  .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    vertical-align: middle;
+  }
+
+  .status-badge.paid {
+    color: #146c43;
+    background-color: #d1e7dd;
+  }
+
+  .status-badge.pending {
+    color: #664d03;
+    background-color: #fff3cd;
+  }
+
+  .status-badge.late {
+    color: #842029;
+    background-color: #f8d7da;
+  }
+
+  .status-badge.cancelled {
+    color: #41464b;
+    background-color: #e2e3e5;
+  }
+
+  /* BUTTON */
+
+  .btn-mark-paid {
+    background-color: #198754;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .btn-mark-paid:hover {
+    background-color: #157347;
+    color: #fff;
+  }
+
+  .btn-paid {
+    background-color: #d1e7dd;
+    color: #146c43;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: not-allowed;
+    opacity: 1 !important;
+  }
+
+  /*  */
+  .expense-header {
+    padding: 20px;
+  }
+
+  .expense-category {
+    color: #777;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .expense-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .expense-code {
+    color: #888;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .expense-amounts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 35px;
+    padding-top: 15px;
+  }
+
+  .amount-item {
+    min-width: 120px;
+  }
+
+  .amount-label {
+    color: #777;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .amount-value {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .amount-value.paid {
+    color: #198754;
+  }
+
+  .amount-value.balance {
+    color: #dc3545;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .status-badge.pending {
+    background: #fff3cd;
+    color: #664d03;
+  }
+</style>
