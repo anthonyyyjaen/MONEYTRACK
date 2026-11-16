@@ -28,4 +28,5 @@ jobs:
             **/.git*/**
             **/node_modules/**
             **/.env
+            **/config/**
             **/dbtest.php
