@@ -46,23 +46,25 @@ switch ($function) {
             $yearMonth = "$year-$month";
 
             $res = $conn->query("SELECT * FROM " . TABLE_EXPENSE . " WHERE STATUS = '" . EXPSTATUS_PENDING . "' AND DELDATE IS NULL");
-            if ($res->num_rows === 0) throw new Exception("Empty");
-
             $tbody = "";
             $tfoot = "";
-            $totalAmount = 0;
-            while ($detail = $res->fetch_assoc()) {
-                $dates = generateCalendarData($detail, $yearMonth, [$cutoff]);
-                $transactions = getTransactionByExpCode($conn, $detail['EXPENSECODE']);
 
-                foreach ($dates as $date) {
-                    $totalAmount += floatval($detail['AMOUNT']);
+            if ($res->num_rows > 0) {
+                $tbody = "";
+                $tfoot = "";
+                $totalAmount = 0;
+                while ($detail = $res->fetch_assoc()) {
+                    $dates = generateCalendarData($detail, $yearMonth, [$cutoff]);
+                    $transactions = getTransactionByExpCode($conn, $detail['EXPENSECODE']);
 
-                    $formattedAmount = numberFormat($detail['AMOUNT']);
-                    $formattedDate = dateFormat($date['date']);
-                    $types = explode("-", $date['type']);
-                    $status = empty($transactions[$calData['date']]) ? 'unpaid' : 'paid';
-                    $tbody .= "
+                    foreach ($dates as $date) {
+                        $totalAmount += floatval($detail['AMOUNT']);
+
+                        $formattedAmount = numberFormat($detail['AMOUNT']);
+                        $formattedDate = dateFormat($date['date']);
+                        $types = explode("-", $date['type']);
+                        $status = empty($transactions[$calData['date']]) ? 'unpaid' : 'paid';
+                        $tbody .= "
                         <tr class='$status'>
                             <td>{$types[0]}</td>
                             <td>{$date['name']}</td>
@@ -70,15 +72,16 @@ switch ($function) {
                             <td>$formattedAmount</td>
                         </tr>
                     ";
+                    }
                 }
-            }
-            $totalAmount = numberFormat($totalAmount);
-            $tfoot = "
+                $totalAmount = numberFormat($totalAmount);
+                $tfoot = "
                 <tr>
                     <td colspan='3'></td>
                     <td>$totalAmount</td>
                 </tr>
-            ";
+                ";
+            }
 
             $ret["status"] = 200;
             $ret['tbody'] = $tbody;
@@ -96,23 +99,22 @@ switch ($function) {
             $yearMonth = "$year-$month";
 
             $res = $conn->query("SELECT * FROM " . TABLE_EXPENSE . " WHERE STATUS = '" . EXPSTATUS_PENDING . "' AND DELDATE IS NULL");
-            if ($res->num_rows === 0) throw new Exception("Empty");
-
             $tbody = "";
             $tfoot = "";
             $totalAmount = 0;
-            while ($detail = $res->fetch_assoc()) {
-                $dates = generateCalendarData($detail, $yearMonth, [1, 2]);
-                $transactions = getTransactionByExpCode($conn, $detail['EXPENSECODE']);
+            if ($res->num_rows > 0) {
+                while ($detail = $res->fetch_assoc()) {
+                    $dates = generateCalendarData($detail, $yearMonth, [1, 2]);
+                    $transactions = getTransactionByExpCode($conn, $detail['EXPENSECODE']);
 
-                foreach ($dates as $date) {
-                    $totalAmount += floatval($detail['AMOUNT']);
+                    foreach ($dates as $date) {
+                        $totalAmount += floatval($detail['AMOUNT']);
 
-                    $formattedAmount = numberFormat($detail['AMOUNT']);
-                    $formattedDate = dateFormat($date['date']);
-                    $types = explode("-", $date['type']);
-                    $status = empty($transactions[$calData['date']]) ? 'unpaid' : 'paid';
-                    $tbody .= "
+                        $formattedAmount = numberFormat($detail['AMOUNT']);
+                        $formattedDate = dateFormat($date['date']);
+                        $types = explode("-", $date['type']);
+                        $status = empty($transactions[$calData['date']]) ? 'unpaid' : 'paid';
+                        $tbody .= "
                         <tr class='$status'>
                             <td>{$types[0]}</td>
                             <td>{$date['name']}</td>
@@ -120,15 +122,16 @@ switch ($function) {
                             <td>$formattedAmount</td>
                         </tr>
                     ";
+                    }
                 }
-            }
-            $totalAmount = numberFormat($totalAmount);
-            $tfoot = "
+                $totalAmount = numberFormat($totalAmount);
+                $tfoot = "
                 <tr>
                     <td colspan='3'></td>
                     <td>$totalAmount</td>
                 </tr>
             ";
+            }
 
             $ret["status"] = 200;
             $ret['tbody'] = $tbody;
@@ -170,7 +173,6 @@ switch ($function) {
 
             $ret["status"] = 200;
             $ret['tbody'] = $tbody;
-            $ret['tfoot'] = $tfoot;
         } catch (Exception $e) {
             $ret['status'] = 400;
             $ret['error'] = $e->getMessage();
