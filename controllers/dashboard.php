@@ -63,7 +63,7 @@ switch ($function) {
                         $formattedAmount = numberFormat($detail['AMOUNT']);
                         $formattedDate = dateFormat($date['date']);
                         $types = explode("-", $date['type']);
-                        $status = empty($transactions[$calData['date']]) ? 'unpaid' : 'paid';
+                        $status = empty($transactions[$date['date']]) ? 'unpaid' : 'paid';
                         $tbody .= "
                         <tr class='$status'>
                             <td>{$types[0]}</td>
@@ -113,7 +113,7 @@ switch ($function) {
                         $formattedAmount = numberFormat($detail['AMOUNT']);
                         $formattedDate = dateFormat($date['date']);
                         $types = explode("-", $date['type']);
-                        $status = empty($transactions[$calData['date']]) ? 'unpaid' : 'paid';
+                        $status = empty($transactions[$date['date']]) ? 'unpaid' : 'paid';
                         $tbody .= "
                         <tr class='$status'>
                             <td>{$types[0]}</td>
